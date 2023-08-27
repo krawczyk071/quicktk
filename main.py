@@ -134,6 +134,12 @@ class FileDialog(ttk.Button):
 
 
 class MessageBox:
+    def __init__(self):
+        self.response = None
+
+    def get(self):
+        return self.response
+
     @staticmethod
     def showinfo(title=None, message=None, **options):
         "Show an info message"
@@ -149,35 +155,32 @@ class MessageBox:
         "Show an error message"
         return messagebox.showerror(title, message, **options)
 
-    @staticmethod
-    def askquestion(title=None, message=None, **options):
+    def askquestion(self, title=None, message=None, **options):
         "Ask a question"
-        return messagebox.askquestion(title, message, **options)
+        # return messagebox.askquestion(title, message, **options)
+        s = messagebox.askquestion(title, message, **options)
+        self.response = s
 
-    @staticmethod
-    def askokcancel(title=None, message=None, **options):
+    def askokcancel(self, title=None, message=None, **options):
         "Ask if operation should proceed; return true if the answer is ok"
         s = messagebox.askokcancel(title, message, **options)
-        return s
+        self.response = s
 
-    @staticmethod
-    def askyesno(title=None, message=None, **options):
+    def askyesno(self, title=None, message=None, **options):
         "Ask a question; return true if the answer is yes"
         s = messagebox.askyesno(title, message, **options)
-        return s
+        self.response = s
 
-    @staticmethod
-    def askyesnocancel(title=None, message=None, **options):
+    def askyesnocancel(self, title=None, message=None, **options):
         "Ask a question; return true if the answer is yes, None if cancelled."
         s = messagebox.askyesnocancel(title, message, **options)
         # s might be a Tcl index object, so convert it to a string
-        return s
+        self.response = s
 
-    @staticmethod
-    def askretrycancel(title=None, message=None, **options):
+    def askretrycancel(self, title=None, message=None, **options):
         "Ask if operation should be retried; return true if the answer is yes"
         s = messagebox.askretrycancel(title, message, **options)
-        return s
+        self.response = s
 
 
 #     def __init__(self, master, txt):
@@ -201,6 +204,9 @@ txt1 = TextOutput(frm1, "test1")
 fd1 = FileDialog(frm1, "open", "files")
 btn2 = Button(frm1, "destroy", lambda: frm1.clear_widgets())
 # messagebox.showinfo("showinfo", "Information")
-MessageBox.askokcancel("showinfo", "Information")
+msg1 = MessageBox()
+msg1.askquestion("q1", "ask me")
+
+btn3 = Button(frm1, "print ipt", lambda: print(msg1.get()))
 
 gui.mainloop()
